@@ -2,7 +2,7 @@
 
 给货代单证员使用。主提单与分提单拆并形成有向无环关系，件数和净毛重逐层守恒。
 
-七个业务模块：舱单采信、包装映射、拆并编组、危险品检查、净毛重核验、报关对账、版本封存。
+八个业务模块：舱单采信、包装映射、拆并编组、危险品检查、净毛重核验、报关对账、版本封存、交换裁决。
 
 ```sh
 docker compose up --build -d
@@ -14,6 +14,8 @@ docker compose exec -T app pytest -q
 各模块页面对应 `/<模块英文名>`，各模块执行入口为 `POST /api/<模块英文名>`，不传参即可独立演示。完整运行 `POST /api/runs` 支持 `dataset`（dirty/clean/legacy）、`csv_text` 与 `overrides` 参数。批次历史 `GET /api/runs`，详情 `GET /api/runs/{run_id}`。
 
 同输入与规则版本生成相同批号，只保留一条批次。复核入口 `POST /api/runs/{run_id}/review` 提交当前 `revision`，陈旧提交409。归档包只有一个下载入口 `GET /api/export/{run_id}`，含证据和运行摘要。原始隔离在页面同屏显示。
+
+交换裁决在截单前形成交换结果：已到达补正（`arrived`：upsert/withdraw）落盘后重算全链路并逐单重核受影响主单，未到补正（`pending`）按主单挂起。全闭合则全量交换；有未闭合主单且下游收增量则交可证明范围，增量包显式标记 INCREMENTAL 并附未闭合清单，绝不冒充全量；否则等全补。相同交换重试幂等重放，回执按入账号唯一入账不重复。交换包按版本落库，生成中断时整体回滚、旧版保持现行且可恢复。交换历史 `GET /api/exchanges`，详情 `GET /api/exchange/{exchange_id}`，旧版包 `GET /api/exchange/{exchange_id}/packages/{version}`。
 
 SQLite使用命名卷，容器重启后保留历史。要重建演示可在Compose中改用新的卷名称，保留旧卷。
 

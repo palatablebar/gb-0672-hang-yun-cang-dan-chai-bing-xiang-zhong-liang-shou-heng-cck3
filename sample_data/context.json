@@ -6,7 +6,8 @@
     "hazard",
     "weight",
     "reconcile",
-    "archive"
+    "archive",
+    "exchange"
   ],
   "packages": {
     "carton": "1",
@@ -28,5 +29,10 @@
     "pieces": 240,
     "net_kg": "2400",
     "gross_kg": "2640"
+  },
+  "exchange": {
+    "downstream_incremental": true,
+    "cutoff": "2026-11-21T18:00:00+08:00",
+    "voyage": "CN-1126"
   }
 }

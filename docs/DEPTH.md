@@ -13,6 +13,7 @@
 | M5 净毛重核验 | 执行并复核净毛重核验 | `POST /api/weight` | `app/modules/weight/rules.py` | `tests/test_weight.py` |
 | M6 报关对账 | 执行并复核报关对账 | `POST /api/reconcile` | `app/modules/reconcile/rules.py` | `tests/test_reconcile.py` |
 | M7 版本封存 | 执行并复核版本封存 | `POST /api/archive` | `app/modules/archive/rules.py` | `tests/test_archive.py` |
+| M8 交换裁决 | 裁决交可证明范围还是等全补并生成交换包 | `POST /api/exchange` | `app/modules/exchange/service.py` | `tests/test_exchange.py` |
 
 ## 陷阱登记
 
@@ -29,6 +30,10 @@
 | TRAP-06 | 全角千分位 | 静默错算或证据丢失 | 以可复核规则显式处理 | `app/modules/packaging/rules.py` | `tests/test_packaging.py::test_fullwidth_decimal` |
 | TRAP-20 | 拆并依赖环 | 静默错算或证据丢失 | 以可复核规则显式处理 | `app/modules/grouping/rules.py` | `tests/test_grouping.py::test_cycle_real` |
 | TRAP-21 | 缺失父级 | 静默错算或证据丢失 | 以可复核规则显式处理 | `app/modules/grouping/rules.py` | `tests/test_grouping.py::test_missing_parent_real` |
+| TRAP-22 | 增量误当全量 | 包类型缺省或默认可全量 | 包类型显式 FULL/INCREMENTAL，is_full 随包持久化，增量包必附未闭合清单 | `app/modules/exchange/service.py` | `tests/test_exchange.py::test_partial_decision_keeps_incremental_explicit` |
+| TRAP-23 | 回执重复入账 | 重试重复生成回执 | 交换摘要幂等重放，入账号唯一约束 | `app/modules/exchange/service.py` | `tests/test_exchange.py::test_same_exchange_retry_no_duplicate_receipt` |
+| TRAP-24 | 生成中断覆盖原包 | 原地覆盖写，旧版不可恢复 | 包按版本落库，原子提交现行指针，中断回滚旧版仍现行 | `app/modules/exchange/service.py` | `tests/test_exchange.py::test_interrupted_generation_restores_previous_version` |
+| TRAP-25 | 补正后未重核 | 补正落盘后直接放行 | 补正重算全链路，受影响主单逐单重核并记录结论 | `app/modules/exchange/service.py` | `tests/test_exchange.py::test_arrived_correction_reverify_and_scope_regain` |
 
 ## 对账规则
 

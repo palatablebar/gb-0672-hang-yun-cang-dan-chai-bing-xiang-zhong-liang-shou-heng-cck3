@@ -10,7 +10,8 @@
     "危险品检查",
     "净毛重核验",
     "报关对账",
-    "版本封存"
+    "版本封存",
+    "交换裁决"
   ],
   "rule": "主提单与分提单拆并形成有向无环关系，件数和净毛重逐层守恒",
   "lane": "L3",
@@ -29,7 +30,8 @@
     "hazard",
     "weight",
     "reconcile",
-    "archive"
+    "archive",
+    "exchange"
   ],
   "labels": {
     "id": "提单编号",
@@ -63,6 +65,14 @@
     "graph_errors": "关系错误",
     "weight_errors": "重量差异",
     "child": "子单号",
-    "classes": "危险类组合"
+    "classes": "危险类组合",
+    "status": "状态",
+    "reasons": "原因",
+    "decision": "裁决",
+    "package_type": "包类型",
+    "scope": "可交范围",
+    "unclosed": "未闭合主单",
+    "receipt": "回执",
+    "ledger_no": "入账编号"
   }
 }
